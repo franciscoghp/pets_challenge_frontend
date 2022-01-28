@@ -1,0 +1,50 @@
+<form>
+  <div class="form-group form-inline">
+      search: <input class="form-control ml-2" type="text" name="filter" [(ngModel)]="filter" (ngModelChange)="search()"/>
+  </div>
+</form>
+
+<table class="table table-striped" *ngIf="owners && !pets">
+  <thead>
+  <tr>
+    <th (click)="sort('name')" scope="col">Name<i class="fa fa-sort"></i></th>
+    <th (click)="sort('lastname')" scope="col">Lastname<i class="fa fa-sort"></i></th>
+    <th scope="col">N° Pets</th>
+    <th scope="col">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let owner of owners | orderBy: key : reverse | paginate: {itemsPerPage: 5, currentPage: p} ; index as i">
+    <td><ngb-highlight [result]="owner.name" [term]="filter.value"></ngb-highlight></td>
+    <td><ngb-highlight [result]="owner.lastname" [term]="filter.value"></ngb-highlight></td>
+    <td><ngb-highlight [result]="owner.pets.length" [term]="filter.value"></ngb-highlight></td>
+    <td>
+      <i style="margin-right: 15px;" class="fa fa-edit text-primary" (click)="edit(owner, 'owner')"></i>
+      <i class="fas fa-trash-alt text-danger" (click)="delete(owner, 'owner')"></i>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<table class="table table-striped" *ngIf="!owners && pets">
+  <thead>
+  <tr>
+    <th (click)="sort('name')" scope="col">Name<i class="fa fa-sort"></i></th>
+    <th (click)="sort('owner')" scope="col">Owner<i class="fa fa-sort"></i></th>
+    <th (click)="sort('type')" scope="col">Type Pet<i class="fa fa-sort"></i></th>
+    <th scope="col">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let pet of pets | orderBy: key : reverse | paginate: {itemsPerPage: 5, currentPage: p} ; index as i">
+    <td><ngb-highlight [result]="pet.name" [term]="filter.value"></ngb-highlight></td>
+    <td><ngb-highlight [result]="pet.owner" [term]="filter.value"></ngb-highlight></td>
+    <td><ngb-highlight [result]="pet.type" [term]="filter.value"></ngb-highlight></td>
+    <td>
+      <i style="margin-right: 15px;" class="fa fa-edit text-primary" (click)="edit(pet, 'pet')"></i>
+      <i class="fas fa-trash-alt text-danger" (click)="delete(pet, 'pet')"></i>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<pagination-controls (pageChange)="p = $event"></pagination-controls>

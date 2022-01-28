@@ -1,0 +1,110 @@
+<div class="card my-4 col-md-4 mx-auto">
+    <div class="card-body">
+        <form [formGroup]="form">
+            <div class="mb-3">
+                <label class="form-label">Select an owner</label>
+                <select (change)="changeOwner($event.target.value)" formControlName="owner" class="form-control">
+                    <option selected>Select</option>
+                    <option *ngFor="let owner of owners" value="{{owner.id}}">{{owner.name}} {{owner.lastname}}</option>
+                </select>
+                <div class="my-2 row">
+                    <button type="button" (click)="open(content)" class="btn btn-primary">
+                        New Pet
+                    </button>
+                    <button type="button" routerLink="/" class="btn btn-primary right-button">
+                        Return
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container mt-4" *ngIf="data?.length > 0">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="text-center">List of Pets</h1>
+        <app-datatable 
+        [pets]="data" 
+        (searchEvent)="reload($event)" 
+        (deletePet)="delete($event)"
+        (editPet)="editModal($event, content)"
+        ></app-datatable>
+
+      </div>
+    </div>
+</div>
+
+
+
+<div *ngIf="!data && !ownerSelected" class="jumbotron mt-4" style="background: white; padding: 2rem 2rem;;" >
+    <h2 class="text-center" style="font-weight: 300;">
+        Here we gonna show the best friends in the world.
+    </h2>
+    <div class="text-center">
+        <img src="../../assets/images/picture.gif" width="500px" alt="Pets">
+    </div>
+</div>
+
+<div *ngIf="ownerSelected && data?.length == 0" class="jumbotron mt-4" style="background: white; padding: 2rem 2rem;;" >
+    <div class="text-center">
+        <h2 class="text-center" style="font-weight: 300;">
+            There are no pets yet. Add a new one!!
+        </h2>
+    </div>
+    <div class="text-center">
+        <img src="../../assets/images/download.jpg"  width="500px" alt="Pets">
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 *ngIf="!edit_id" class="modal-title" id="modal-basic-title">Add a new Pet</h4>
+      <h4 *ngIf="edit_id" class="modal-title" id="modal-basic-title">Edita a Pet</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="formNewPet" (ngSubmit)="postPet()">
+    <div class="modal-body">
+        <div class="form-group">
+          <div class="input-group">
+          <div class="col-md-6">
+            <label for="inputName" class="form-label text-registro">Nombre</label>
+            <input [ngClass]="{ invalid: validation('name') }" 
+            type="text" formControlName="name" class="form-control inputregistro" >
+            <span *ngIf="validation('name')"
+              class="help-block text-danger">Este campo es requerido.</span>
+          </div>
+          <div class="col-md-6">
+            <label for="inputName" class="form-label text-registro">Tipo de Mascota</label>
+            <select formControlName="type" class="form-control">
+                <option selected>Select</option>
+                <option>Perro</option>
+                <option>Gato</option>
+                <option>Tortuga</option>
+                <option>Pajaro</option>
+                <option>Pez</option>
+                <option>Otro</option>
+            </select>
+            <span *ngIf="validation('type')"
+            class="help-block text-danger">Este campo es requerido.</span>
+          </div>
+          <div class="col-md-12">
+            <label for="inputName" class="form-label text-registro">Dueño</label>
+            <select formControlName="owner" class="form-control">
+                <option selected>Select</option>
+                <option *ngFor="let owner of owners" value="{{owner.id}}">{{owner.name}} {{owner.lastname}}</option>
+            </select>
+            <span *ngIf="validation('owner')"
+            class="help-block text-danger">Este campo es requerido.</span>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="!edit_id" type="submit" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+        <button *ngIf="edit_id" class="btn btn-success" (click)="edit()">Edit</button>
+      </div>
+    </form>
+  </ng-template>

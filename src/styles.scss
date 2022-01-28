@@ -1,0 +1,10 @@
+body{
+    background: #008e2c;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1F1C18, #008e2c);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1F1C18, #008e2c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.right-button{
+    position: absolute;
+    right: 20px;
+}

@@ -1,0 +1,4 @@
+export const appconfig = {
+	path: "https://ap2.cash-flag.com/api",
+	x_api_key: "ZzsLi3FJTYbVD4Hn2qGheRu9yPSXcA1QjWtEgNBp"
+}

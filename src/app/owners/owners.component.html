@@ -1,0 +1,59 @@
+<div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="text-center">List of Owners</h1>
+        <div>
+          <button type="button" (click)="open(content)" class="btn btn-primary my-2">
+            New Owner
+          </button>
+          <button type="button" routerLink="/" class="btn btn-primary my-2 right-button">
+            Return
+          </button>
+        </div>
+        <app-datatable [owners]="data" 
+        (searchEvent)="reload($event)" 
+        (deleteOwner)="delete($event)"
+        (editOwner)="editModal($event, content)"
+        ></app-datatable>
+
+      </div>
+    </div>
+</div>
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 *ngIf="!edit_id" class="modal-title" id="modal-basic-title">Add a new Owner</h4>
+    <h4 *ngIf="edit_id" class="modal-title" id="modal-basic-title">Edit Owner</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="postOwners()">
+  <div class="modal-body">
+      <div class="form-group">
+        <div class="input-group">
+        <div class="col-md-6">
+          <label for="inputName" class="form-label text-registro">Nombre</label>
+          <input [ngClass]="{ invalid: validation('name') }" 
+          type="text" formControlName="name" class="form-control inputregistro" >
+          <span *ngIf="validation('name')"
+            class="help-block text-danger">Este campo es requerido.</span>
+        </div>
+        <div class="col-md-6">
+          <label for="inputName" class="form-label text-registro">Apellido</label>
+          <input [ngClass]="{ invalid: validation('lastname') }"  
+          type="text" formControlName="lastname" class="form-control inputregistro" >
+          <span *ngIf="validation('lastname')"
+          class="help-block text-danger">Este campo es requerido.</span>
+        </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button *ngIf="!edit_id" type="submit" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+      <button *ngIf="edit_id" class="btn btn-success" (click)="edit()">Edit</button>
+    </div>
+  </form>
+</ng-template>
