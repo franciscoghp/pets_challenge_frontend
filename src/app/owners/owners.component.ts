@@ -37,7 +37,6 @@ export class OwnersComponent implements OnInit {
   }
 
   reload(value: any){
-    console.log(value)
     if(value) this.ngOnInit();
   }
 
@@ -48,9 +47,7 @@ export class OwnersComponent implements OnInit {
       }else{
         this.edit()
       }
-    }, (reason) => {
-      console.log('reason',reason)
-    });
+    }, (reason) => {});
   }
 
   validation(control: string){
@@ -64,6 +61,7 @@ export class OwnersComponent implements OnInit {
     const { name, lastname } = this.form.value;
     this.ownerService.postOwners({name, lastname}).subscribe( res =>{
       this.spinnerService.hide();
+      this.form.reset();
       this.ngOnInit();
     }, error =>{
       this.messageService.messageError(error)
@@ -73,7 +71,6 @@ export class OwnersComponent implements OnInit {
   async delete(data: any){
     let confirmed = await this.messageService.messageModal('dueño');
     if(confirmed){
-      console.log(data)
       this.ownerService.deleteOwner(data.id).subscribe( res=>{
         this.ngOnInit()
         this.messageService.messageSuccess('El dueño fue eliminado con éxito')
@@ -84,7 +81,6 @@ export class OwnersComponent implements OnInit {
   }
 
   editModal(data: any, content){
-    console.log(data)
     this.open(content);
     this.edit_id = data.id
     this.form.controls.name.setValue(data.name);
@@ -97,7 +93,8 @@ export class OwnersComponent implements OnInit {
     this.ownerService.editOwner(this.edit_id, { name, lastname }).subscribe( res=>{
       this.ngOnInit()
       this.edit_id = null;
-      this.messageService.messageSuccess('El dueño fue editado con éxito')
+      this.messageService.messageSuccess('El dueño fue editado con éxito');
+      this.form.reset();
     }, error =>{
       this.messageService.messageError(error)
     });

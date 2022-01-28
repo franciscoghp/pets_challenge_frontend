@@ -59,7 +59,6 @@ export class DatatableComponent {
   }
 
   delete(data: any, type: string){
-    console.log(type)
     if(type == 'owner'){
       this.deleteOwner.emit(data)
     }else{
@@ -68,7 +67,6 @@ export class DatatableComponent {
   }
 
   edit(data: any, type: string){
-    console.log(type)
     if(type == 'owner'){
       this.editOwner.emit(data)
     }else{

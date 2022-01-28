@@ -47,9 +47,7 @@ export class PetsComponent implements OnInit {
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.postPet()
-    }, (reason) => {
-      console.log('reason',reason)
-    });
+    }, (reason) => {});
   }
 
   validation(control: string){
@@ -59,12 +57,10 @@ export class PetsComponent implements OnInit {
   }
 
   changeOwner( owner: string){
-    console.log(owner)
     this.ownerSelected = true
     this.spinnerService.show();
     this.petService.getPets(owner).subscribe( res =>{
       this.data  = res.data
-      console.log(this.data)
       this.spinnerService.hide();
     });
   }
@@ -76,10 +72,10 @@ export class PetsComponent implements OnInit {
   postPet(){
     this.spinnerService.show();
     const { name, owner, type } = this.formNewPet.value;
-    console.log(owner)
     this.petService.postPets({ name, owner_id :owner, type }).subscribe( res =>{
       this.changeOwner( owner)
-      this.messageService.messageSuccess('La mascota fue agregada con éxito')
+      this.messageService.messageSuccess('La mascota fue agregada con éxito');
+      this.formNewPet.reset();
       this.spinnerService.hide();
     }, error =>{
       this.messageService.messageError(error)
@@ -89,7 +85,6 @@ export class PetsComponent implements OnInit {
   async delete(data: any){
     let confirmed = await this.messageService.messageModal('mascota');
     if(confirmed){
-      console.log(data)
       this.petService.deletePet(data.id).subscribe( res=>{
         this.changeOwner(data.owner_id )
         this.messageService.messageSuccess('La mascota fue eliminada con éxito')
@@ -100,7 +95,6 @@ export class PetsComponent implements OnInit {
   }
 
   editModal(data: any, content){
-    console.log(data)
     this.open(content);
     this.edit_id = data.id
     this.formNewPet.controls.name.setValue(data.name);
@@ -114,8 +108,9 @@ export class PetsComponent implements OnInit {
     this.petService.editPet(this.edit_id, { name, owner, type }).subscribe( res=>{
       this.ngOnInit()
       this.edit_id = null;
-      this.changeOwner(owner )
-      this.messageService.messageSuccess('La mascota fue editada con éxito')
+      this.changeOwner(owner );
+      this.formNewPet.reset();
+      this.messageService.messageSuccess('La mascota fue editada con éxito');
     }, error =>{
       this.messageService.messageError(error)
     });
